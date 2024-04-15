@@ -7,21 +7,21 @@ import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 
+import model.exception.DomainException;
+
 public abstract class Folga {
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	Locale localeBR = new Locale("pt", "BR");
-	
+
 	protected LocalDate ultFolga;
 	protected LocalDate pesqFolga;
-	protected long diferencaDias;
-	
+
 	public Folga() {
 	}
 
-	public Folga(String ultFolga, String pesqFolga) {
-		this.ultFolga = LocalDate.parse(ultFolga, formatter);
-		this.pesqFolga = LocalDate.parse(pesqFolga, formatter);
-		diferencaDias = this.ultFolga.until(this.pesqFolga, ChronoUnit.DAYS);
+	public Folga(LocalDate ultFolga, LocalDate pesqFolga) {
+		this.ultFolga = ultFolga;
+		this.pesqFolga = pesqFolga;
 	}
 
 	public LocalDate getUltFolga() {
@@ -40,16 +40,21 @@ public abstract class Folga {
 		this.pesqFolga = pesqFolga;
 	}
 
-	public long getDiferencaDias() {
-		return diferencaDias;
+	public abstract void pesquisarFolga() throws DomainException;
+
+	public long diferencaDias(LocalDate ultFolga, LocalDate pesqFolga) throws DomainException {
+		LocalDate agr = LocalDate.now();
+		if (ultFolga.isAfter(agr)) {
+			throw new DomainException("A data digitada da última folga é depois do dia atual");
+		}
+		if (pesqFolga.isBefore(ultFolga)) {
+			throw new DomainException(
+					"A data digitada para para descobrir se estará de folga é anterior a data da sua última folga");
+		}
+		return this.ultFolga.until(this.pesqFolga, ChronoUnit.DAYS);
+
 	}
 
-	public void setDiferencaDias(long diferencaDias) {
-		this.diferencaDias = diferencaDias;
-	}
-
-	public abstract void pesquisarFolga();
-	
 	public String dia(LocalDate date) {
 		DayOfWeek day = date.getDayOfWeek();
 		return day.getDisplayName(TextStyle.FULL, localeBR);
