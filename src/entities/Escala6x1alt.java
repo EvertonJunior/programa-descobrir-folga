@@ -16,7 +16,10 @@ public class Escala6x1alt extends Folga {
 
 	@Override
 	public void pesquisarFolga() throws DomainException {
-		if (dia(ultFolga).equals("sábado")) {
+		String diaSemana = dia(ultFolga);
+
+		switch (diaSemana) {
+		case "sábado":
 			if (diferencaDias(ultFolga, pesqFolga) == 8 || diferencaDias(ultFolga, pesqFolga) % 14 == 0
 					|| (diferencaDias(ultFolga, pesqFolga) - 8) % 14 == 0) {
 				System.out
@@ -25,8 +28,8 @@ public class Escala6x1alt extends Folga {
 				System.out.println(
 						"No dia " + formatter.format(pesqFolga) + " " + dia(pesqFolga) + " não estará de folga!");
 			}
-		}
-		if (dia(ultFolga).equals("domingo")) {
+			break;
+		case "domingo":
 			if (diferencaDias(ultFolga, pesqFolga) == 6 || diferencaDias(ultFolga, pesqFolga) % 14 == 0
 					|| (diferencaDias(ultFolga, pesqFolga) - 6) % 14 == 0) {
 				System.out
@@ -35,6 +38,10 @@ public class Escala6x1alt extends Folga {
 				System.out.println(
 						"No dia " + formatter.format(pesqFolga) + " " + dia(pesqFolga) + " não estará de folga!");
 			}
+			break;
+		default:
+			System.out.println(diaSemana + " como ultima folga não é válida: Apenas sab/dom");
+			break;
 		}
 
 	}

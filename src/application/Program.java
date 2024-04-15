@@ -32,29 +32,34 @@ public class Program {
 
 			int opç = sc.nextInt();
 
-			Folga escala;
+			Folga escala = null;
 
-			if (opç == 1) {
+			switch (opç) {
+			case 1:
 				escala = new Escala4x2(ultFolga, pesqFolga);
-			}
-
-			else if (opç == 2) {
+				break;
+			case 2:
 				escala = new Escala6x1alt(ultFolga, pesqFolga);
-			}
-
-			else {
+				break;
+			case 3:
 				escala = new Escala12x36(ultFolga, pesqFolga);
+				break;
+			default:
+				System.out.println("Opção inválida!");
+				break;
 			}
 
 			escala.pesquisarFolga();
+
 		} catch (DateTimeParseException e) {
 			System.out.println("Digite um formato de data válido. (dd/MM/aaaa)");
 		} catch (InputMismatchException e) {
 			System.out.println("Digite apenas números! ");
 		} catch (DomainException e) {
 			System.out.println("Data inválida: " + e.getMessage());
+		} catch (NullPointerException e) {
+			System.out.println("Escolha alguma escala! ");
 		}
-
 		sc.close();
 	}
 }
